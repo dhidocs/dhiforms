@@ -1,0 +1,19 @@
+/* Design tokens for dhiforms. Each defaults to the host's Mantine theme, so light and dark schemes follow it; override any of them on :root or a wrapper. */
+:root {
+  --df-surface: var(--mantine-color-gray-0);
+  --df-paper: var(--mantine-color-body);
+  --df-ink: var(--mantine-color-text);
+  --df-ink-soft: var(--mantine-color-dimmed);
+  --df-line: var(--mantine-color-default-border);
+  --df-primary: var(--mantine-primary-color-filled);
+  --df-warning: var(--mantine-color-yellow-6);
+  --df-success: var(--mantine-color-green-7);
+  --df-danger: var(--mantine-color-red-7);
+  --df-radius-control: var(--mantine-radius-sm);
+  --df-radius-panel: var(--mantine-radius-md);
+  --df-heading-stretch: 100%;
+}
+
+.df-tabular {
+  font-variant-numeric: tabular-nums;
+}

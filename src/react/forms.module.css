@@ -1,0 +1,659 @@
+/* Layout: a 12-column grid per row that stacks when the row itself is phone-narrow (480px), so it works in a phone column, a side panel and the designer canvas. */
+.rowFrame {
+  container-type: inline-size;
+}
+
+/* Faruma ships one weight, so Dhivehi question text would otherwise render in the browser's fake bold. */
+.rowFrame:lang(dv) {
+  font-synthesis-weight: none;
+}
+
+/* Thaana's taller line boxes make questions run together, so Dhivehi forms space them further apart. */
+.grid:lang(dv) {
+  row-gap: 40px;
+}
+
+.rows:lang(dv) {
+  gap: 44px;
+}
+
+/* Without bold to set questions apart, Dhivehi questions match the answer text size. */
+.rowFrame:lang(dv) :global(.mantine-InputWrapper-label) {
+  font-size: var(--mantine-font-size-md);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 28px 16px;
+  align-items: start;
+}
+
+.cell {
+  grid-column: span var(--span, 12);
+  min-width: 0;
+}
+
+@container (max-width: 480px) {
+  .cell {
+    grid-column: 1 / -1;
+  }
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.break {
+  margin-block: 4px;
+}
+
+.heading {
+  margin: 8px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+  font-stretch: var(--df-heading-stretch);
+}
+
+.subheading {
+  margin: 4px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.paragraph {
+  max-inline-size: 68ch;
+  color: var(--df-ink);
+}
+
+.headingQuiet,
+.subheadingQuiet {
+  margin: 4px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--df-ink-soft);
+}
+
+.paragraphQuiet {
+  max-inline-size: 72ch;
+  font-size: 13px;
+  color: var(--df-ink-soft);
+}
+
+/* Answers */
+.answer {
+  font-size: 15px;
+  overflow-wrap: anywhere;
+
+  &[data-tabular] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  &[data-multiline] {
+    white-space: pre-wrap;
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-inline-size: 100%;
+  padding: 4px 10px;
+  border: 1px solid var(--df-line);
+  border-radius: var(--df-radius-control);
+  background: var(--df-paper);
+  font-size: 13px;
+}
+
+.chipName {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chipSize {
+  color: var(--df-ink-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.chipRemove {
+  --cb-icon-size: 16px;
+
+  @media (max-width: 36em) {
+    flex: none;
+    inline-size: 44px;
+    block-size: 44px;
+    margin-block: -6px;
+    margin-inline-end: -8px;
+  }
+}
+
+/* Lookup status card: found = success, no record = neutral, error = danger, checking = primary */
+.lookupCard {
+  --lookup-tone: var(--df-ink-soft);
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--lookup-tone) 35%, var(--df-line));
+  border-radius: var(--df-radius-control);
+  background: color-mix(in srgb, var(--lookup-tone) 6%, var(--df-paper));
+
+  &[data-status='found'] {
+    --lookup-tone: var(--df-success);
+  }
+
+  &[data-status='error'] {
+    --lookup-tone: var(--df-danger);
+  }
+
+  &[data-status='pending'] {
+    --lookup-tone: var(--df-primary);
+  }
+}
+
+.lookupIcon {
+  display: grid;
+  place-items: center;
+  block-size: 20px;
+  color: var(--lookup-tone);
+}
+
+.lookupBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.lookupSlot {
+  margin-block-start: 6px;
+}
+
+.lookupHint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--df-ink-soft);
+}
+
+/* Inputs */
+.optionStack {
+  display: grid;
+  gap: var(--mantine-spacing-xs);
+  margin-block-start: var(--mantine-spacing-xs);
+}
+
+.optionRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
+  gap: var(--mantine-spacing-xs);
+  margin-block-start: var(--mantine-spacing-xs);
+}
+
+.optionCard {
+  padding: 12px 14px;
+  border: 1px solid var(--df-line);
+  border-radius: var(--df-radius-control);
+  background: var(--df-paper);
+  transition: border-color 120ms, background-color 120ms;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--df-primary) 50%, var(--df-line));
+  }
+
+  &[data-checked] {
+    border-color: var(--df-primary);
+    background: color-mix(in srgb, var(--df-primary) 6%, var(--df-paper));
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--df-primary);
+    outline-offset: 2px;
+  }
+}
+
+.fileSlot {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-block-start: 6px;
+}
+
+.dropzone {
+  padding: 16px;
+  border: 1px dashed color-mix(in srgb, var(--df-ink) 30%, var(--df-line));
+  border-radius: var(--df-radius-control);
+  background: var(--df-paper);
+
+  &[data-accept] {
+    border-color: var(--df-primary);
+  }
+
+  &[data-reject] {
+    border-color: var(--df-danger);
+  }
+}
+
+.rejection,
+.errorText {
+  margin: 0;
+  color: var(--df-danger);
+}
+
+/* Wizard */
+.wizard {
+  container-type: inline-size;
+  scroll-margin-block-start: 84px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.summary {
+  border-inline-start: 3px solid var(--df-warning);
+}
+
+.summaryList {
+  margin: 8px 0 0;
+  padding-inline-start: 18px;
+
+  @media (max-width: 36em) {
+    & button {
+      padding-block: 10px;
+      text-align: start;
+    }
+  }
+}
+
+.stepCount {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--df-ink-soft);
+}
+
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  --step-tone: var(--df-ink-soft);
+
+  &[data-state='current'],
+  &[data-state='done'] {
+    --step-tone: var(--df-primary);
+  }
+}
+
+.stepButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--step-tone);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.stepMarker {
+  display: grid;
+  place-items: center;
+  inline-size: 24px;
+  block-size: 24px;
+  border: 1px solid var(--step-tone);
+  border-radius: 999px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+
+  .step[data-state='current'] & {
+    background: var(--df-primary);
+    color: var(--df-paper);
+  }
+
+  &[data-flagged] {
+    border-color: var(--df-warning);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--df-warning) 35%, transparent);
+  }
+}
+
+@container (max-width: 600px) {
+  .step:not([data-state='current']) .stepTitle {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .steps {
+    gap: 4px;
+  }
+
+  .stepButton {
+    justify-content: center;
+    min-block-size: 44px;
+    min-inline-size: 44px;
+  }
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid var(--df-line);
+  border-radius: var(--df-radius-panel);
+  background: var(--df-paper);
+}
+
+@container (max-width: 480px) {
+  .page {
+    padding: 16px;
+  }
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  font-stretch: var(--df-heading-stretch);
+  letter-spacing: -0.01em;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--df-primary);
+    outline-offset: 4px;
+  }
+}
+
+.pageDescription {
+  margin-block-start: -8px;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Back on the left, save status, Save draft and Next on the right; on a phone they stack with Next first and full width. */
+.footerBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.footerEnd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px 12px;
+  margin-inline-start: auto;
+}
+
+@container (max-width: 480px) {
+  .footerBar,
+  .footerEnd {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    inline-size: 100%;
+    margin-inline-start: 0;
+  }
+
+  .saveStatus {
+    text-align: center;
+  }
+}
+
+.exitActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  @container (max-width: 480px) {
+    flex-direction: column;
+    inline-size: 100%;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.remarks {
+  border-inline-start: 3px solid var(--df-warning);
+}
+
+.locked {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lockedLabel {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.repeated {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--df-line);
+  border-radius: var(--df-radius-panel);
+  background: color-mix(in srgb, var(--df-surface) 55%, var(--df-paper));
+}
+
+.itemHeader {
+  min-block-size: 24px;
+}
+
+/* Read-only view */
+.view {
+  min-inline-size: 0;
+}
+
+.viewSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-block: 20px;
+
+  & + & {
+    border-block-start: 1px solid var(--df-line);
+  }
+}
+
+.tabList {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tabPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-block-start: 20px;
+}
+
+.viewField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-inline-start: 12px;
+  border-inline-start: 3px solid transparent;
+
+  &[data-flagged] {
+    border-inline-start-color: var(--df-warning);
+  }
+
+  &[data-changed] {
+    border-inline-start-color: var(--df-primary);
+  }
+}
+
+.viewLabelRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-block-size: 24px;
+}
+
+.viewLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--df-ink-soft);
+}
+
+.flagButton {
+  margin-inline-start: auto;
+  opacity: 0;
+
+  .viewField:hover &,
+  .viewField:focus-within &,
+  &:focus-visible {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
+    opacity: 1;
+  }
+}
+
+.previous {
+  overflow-wrap: anywhere;
+}
+
+.flagRemarks {
+  display: flex;
+  gap: 6px;
+  margin: 4px 0 0;
+  font-size: 13px;
+
+  & svg {
+    flex: none;
+    margin-block-start: 3px;
+    color: var(--df-warning);
+  }
+
+  &[data-status='resolved'] {
+    color: var(--df-ink-soft);
+
+    & svg {
+      color: var(--df-ink-soft);
+    }
+  }
+}
+
+/* Page tabs are a second navigation level under the host page's own tabs, so they stay light. */
+.pageTab.pageTab {
+  color: var(--df-ink-soft);
+  font-weight: 500;
+
+  @media (max-width: 36em) {
+    min-block-size: 44px;
+  }
+
+  &:hover {
+    background: color-mix(in srgb, var(--df-ink) 5%, transparent);
+  }
+
+  &[data-active] {
+    background: color-mix(in srgb, var(--df-primary) 10%, transparent);
+    color: var(--df-primary);
+  }
+}
+
+/* Computed fields, error summary, save status and the exit screen */
+.computed {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--df-line);
+  border-radius: var(--df-radius-control);
+  background: color-mix(in srgb, var(--df-surface) 60%, var(--df-paper));
+}
+
+.computedLabel {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.computedValue {
+  font-variant-numeric: tabular-nums;
+}
+
+.errorSummary {
+  scroll-margin-block-start: 84px;
+  border-inline-start: 3px solid var(--df-danger);
+
+  &:focus-visible {
+    outline: 2px solid var(--df-primary);
+    outline-offset: 2px;
+  }
+}
+
+.saveStatus {
+  font-variant-numeric: tabular-nums;
+}
+
+.exit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px;
+  border: 1px solid var(--df-line);
+  border-inline-start: 3px solid var(--df-danger);
+  border-radius: var(--df-radius-panel);
+  background: var(--df-paper);
+}
+
+.exitIcon {
+  color: var(--df-danger);
+}
+
+.exitReason {
+  max-width: 62ch;
+}
